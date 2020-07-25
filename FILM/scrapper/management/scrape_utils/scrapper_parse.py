@@ -1,11 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 
+from Django_F.FILM.scrapper.forms import FilmForm
 from scrapper.management.scrape_utils.scrapper_gather import main_gather as get_links
 
 # Парсинг и попытка сохранить в БД
 from scrapper.models import Film
-
+lst_to_add = []
 
 def get_url_content(url):
     r = requests.get(url)
@@ -57,13 +58,27 @@ def get_url_content(url):
         # avg_audience_score = models.CharField(max_length=3)  # todo Percentage
         if len(title) != 0 and len(tomatores_score) != 0 and len(auidience_score) != 0 and len(genre_type) != 0 and len(
                 premier) != 0:
-            print(title, tomatores_score, auidience_score, genre_type, premier)
-            f = Film(title=title,
-                     avg_tomatometer=tomatores_score,
-                     avg_audience_score=auidience_score,
-                     genre=genre_type,
-                     premier=premier)
-            f.save()
+            # print(title, tomatores_score, auidience_score, genre_type, premier)
+            if Film.objects.filter(title=title,
+                                   avg_tomatometer=tomatores_score,
+                                   avg_audience_score=auidience_score,
+                                   genre=genre_type,
+                                   premier=premier).exists():
+                return None
+
+            f = FilmForm(dict(title=title,
+                              avg_tomatometer=tomatores_score,
+                              avg_audience_score=auidience_score,
+                              genre=genre_type,
+                              premier=premier))
+            lst_to_add.append(f)
+            
+    # прочитать!!
+    Film.objects.bulk_create(lst_to_add)
+            # if f.is_valid():
+            #     f.save()
+            # f.errors
+            # # logger.warning(msg)
 
 
 def main_parse(lst_links):
