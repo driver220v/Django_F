@@ -17,11 +17,11 @@ def get_content_attrs(r):
     title_raw_under_header = soup.find('span', class_='mop-ratings-wrap__title--small')
 
     tomatores = soup.find('div', class_='mop-ratings-wrap__half critic-score')
-    auidience = soup.find('div', class_='mop-ratings-wrap__half audience-score')
+    audience = soup.find('div', class_='mop-ratings-wrap__half audience-score')
 
     title = None
     tomatores_score = None
-    auidience_score = None
+    audience_score = None
     premier = None
     genre_type = None
 
@@ -46,38 +46,36 @@ def get_content_attrs(r):
     except AttributeError:
         tomatores_score = 'Null'
     try:
-        auidience_score = auidience.find('span', class_='mop-ratings-wrap__percentage').text.strip()
+        audience_score = audience.find('span', class_='mop-ratings-wrap__percentage').text.strip()
     except AttributeError:
-        auidience_score = 'Null'
+        audience_score = 'Null'
 
-    return title, tomatores_score, auidience_score, premier, genre_type
+    return title, tomatores_score, audience_score, premier, genre_type
 
 
 def get_url_content(url):
     r = requests.get(url)
     if r.status_code == 200:
-        title, tomatores_score, auidience_score, premier, genre_type = get_content_attrs(r)
-        if len(title) != 0 and len(tomatores_score) != 0 and len(auidience_score) != 0 and len(genre_type) != 0 and len(
+        title, tomatores_score, audience_score, premier, genre_type = get_content_attrs(r)
+        if len(title) != 0 and len(tomatores_score) != 0 and len(audience_score) != 0 and len(genre_type) != 0 and len(
                 premier) != 0:
 
-            if Film.objects.filter(title=title,
-                                   avg_tomatometer=tomatores_score,
-                                   avg_audience_score=auidience_score,
-                                   genre=genre_type,
-                                   premier=premier).exists():
-                pass
+            # if Film.objects.filter(title=title,
+            #                        avg_tomatometer=tomatores_score,
+            #                        avg_audience_score=audience_score,
+            #                        genre=genre_type,
+            #                        premier=premier).exists():
+            #     pass
+            # else:
+            form = FilmForm(dict(title=title,
+                                 avg_tomatometer=tomatores_score,
+                                 avg_audience_score=audience_score,
+                                 genre=genre_type,
+                                 premier=premier))
+            if form.is_valid():
+                model_film.append(form)
             else:
-                f = FilmForm(dict(title=title,
-                                  avg_tomatometer=tomatores_score,
-                                  avg_audience_score=auidience_score,
-                                  genre=genre_type,
-                                  premier=premier))
-                print(f)
-                model_film.append(f)
-                if f.is_valid():
-                    model_film.append(f)
-                else:
-                    logger.warning(f.errors)
+                logger.warning(form.errors)
 
 
 def main_parse(lst_links):

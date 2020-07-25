@@ -10,6 +10,8 @@ from scrapper.models import Film
 class Command(BaseCommand):
     help = 'Start scrape-parse Function'
 
-    def handle(self):
+    def handle(self, *args, **options):
         main_parse(main_gather())
+        print('finished parse')
+        print(model_film)
         Film.objects.bulk_create(model_film)
