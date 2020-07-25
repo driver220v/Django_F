@@ -7,9 +7,9 @@ from django.db import models
 class Film(models.Model):
     title = models.CharField(max_length=50, null=False)
     genre = models.CharField(max_length=40)
-    premier = models.CharField(max_length=4)  # todo выставить правильный формат
-    avg_tomatometer = models.CharField(max_length=3)  # Persange
-    avg_audience_score = models.CharField(max_length=3)  # Persange
+    premier = models.DateField()
+    avg_tomatometer = models.CharField(max_length=3)
+    avg_audience_score = models.CharField(max_length=3)
 
     def __str__(self):
         return f'{self.title} tomatometer: {self.avg_tomatometer}, audience: {self.avg_audience_score}'
