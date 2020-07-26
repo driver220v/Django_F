@@ -1,9 +1,9 @@
 from django.urls import path
-
+from scrapper.views import ListAllView, ListDetailView
 from . import views
 
 urlpatterns = [
-    path('all/', views.all_films, name='scraper-all'),
-    # path('one', views.all_films, name='scrapper-one'),
+    path('all/', ListAllView.as_view(), name='scraper-all'),
+    path('one/', ListDetailView.as_view(), name='scrapper-one'),
     # path('', views.hello, name='scrapper-hello')
 ]

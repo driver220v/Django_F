@@ -1,12 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
+
 #
 from scrapper.forms import FilmForm
 from scrapper.log_module import logger
 from scrapper.management.scrape_utils import model_film
-
 from scrapper.management.scrape_utils.scrapper_gather import main_gather as get_links
-
 # Парсинг и попытка сохранить в БД
 from scrapper.models import Film
 
@@ -59,21 +58,20 @@ def get_url_content(url):
         title, tomatores_score, audience_score, premier, genre_type = get_content_attrs(r)
         if len(title) != 0 and len(tomatores_score) != 0 and len(audience_score) != 0 and len(genre_type) != 0 and len(
                 premier) != 0:
-
-            # if Film.objects.filter(title=title,
-            #                        avg_tomatometer=tomatores_score,
-            #                        avg_audience_score=audience_score,
-            #                        genre=genre_type,
-            #                        premier=premier).exists():
-            #     pass
-            # else:
             form = FilmForm(dict(title=title,
                                  avg_tomatometer=tomatores_score,
                                  avg_audience_score=audience_score,
                                  genre=genre_type,
                                  premier=premier))
             if form.is_valid():
-                model_film.append(form)
+                premier_cleaned = form.cleaned_data['premier']
+                film = Film.objects.filter(title=title, avg_tomatometer=tomatores_score,
+                                           avg_audience_score=audience_score, genre=genre_type,
+                                           premier=premier_cleaned)
+                if film.exists():
+                    pass
+                else:
+
             else:
                 logger.warning(form.errors)
 

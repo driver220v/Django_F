@@ -5,8 +5,8 @@ from django.db import models
 
 
 class Film(models.Model):
-    # id = models.IntegerField(primary_key=True, serialize=True, verbose_name='ID')
-    title = models.CharField(max_length=50, null=False, verbose_name='Title', primary_key=True)
+    id = models.UUIDField(primary_key=True, verbose_name='ID')
+    title = models.CharField(max_length=50, null=False, verbose_name='Title')
     genre = models.CharField(max_length=40, verbose_name='Genre')
     premier = models.DateField(verbose_name='Premier date')
     avg_tomatometer = models.CharField(max_length=3, verbose_name='Tomato_Score')

@@ -6,20 +6,20 @@ from string import punctuation
 from datetime import datetime
 
 
-def trash_remover(date: list):
-    for sign in punctuation:
-        for idx, entry in enumerate(date):
-            if sign in entry:
-                raw_sign = entry.replace(sign, '')
-                date[idx] = raw_sign
-
-    return date
-
-
 class ScrapperDateField(fields.DateField):
+    @staticmethod
+    def trash_remover(date: list):
+        for sign in punctuation:
+            for idx, entry in enumerate(date):
+                if sign in entry:
+                    raw_sign = entry.replace(sign, '')
+                    date[idx] = raw_sign
+
+        return date
+
     def to_python(self, value):
         date = value.split()
-        date_clean: list = trash_remover(date)
+        date_clean: list = self.trash_remover(date)
         premier_sample = namedtuple('Buildings', 'month, day, year')
         premier_composed = premier_sample._make(date_clean)
         month_num = strptime(premier_composed.month, '%b').tm_mon
@@ -33,10 +33,16 @@ class ScrapperDateField(fields.DateField):
 
 # сдлелать под процент!!
 class FilmForm(ModelForm):
+    # id = fields.UUIDField()
+    # title = fields.CharField(verbose_name='Title')
+    # genre = fields.CharField(verbose_name='Genre')
     # premier = May 12, 2017
-    premier = ScrapperDateField(input_formats=['%Y-%m-%d'])
     # Expect 2017-05-12
+    premier = ScrapperDateField(input_formats=['%Y-%m-%d'])
+    # avg_tomatometer = fields.CharField(verbose_name='Tomato_Score')
+    # avg_audience_score = fields.CharField(verbose_name='Audience Score')
 
     class Meta:
         model = Film
-        fields = ['premier']
+        fields = '__all__'
+
