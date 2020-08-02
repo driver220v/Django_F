@@ -27,7 +27,6 @@ class ScrapperDateField(fields.DateField):
         to_date_convert = datetime.strptime(str_time, '%d/%m/%Y')
         # date_to_return  = 2017-12-05
         date_to_return = to_date_convert.date()
-        print(date_to_return)
         return date_to_return
 
 
@@ -36,7 +35,7 @@ class FilmForm(ModelForm):
     # premier = May 12, 2017
     # Expect 2017-05-12
     premier = ScrapperDateField(input_formats=['%Y-%m-%d'])
+
     class Meta:
         model = Film
         fields = '__all__'
-

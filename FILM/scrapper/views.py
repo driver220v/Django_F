@@ -5,12 +5,13 @@ import json
 from .models import Film
 
 
+# http://127.0.0.1:8000/scrape/filter/?title=Wet
 class FilterListView(View):
     def get(self, request, *args, **kwargs):
         queryset = Film.objects.values_list('title', flat=True)
 
         if 'title' in request.GET:
-            queryset=queryset.filter(title__startswith=request.GET['title'])
+            queryset = queryset.filter(title__startswith=request.GET['title'])
 
         return HttpResponse(json.dumps(list(queryset)), content_type='application/json')
 
@@ -24,6 +25,7 @@ class ListAllView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.context)
+
 
 
 class ListDetailView(TemplateView):
