@@ -33,15 +33,9 @@ class ScrapperDateField(fields.DateField):
 
 # сдлелать под процент!!
 class FilmForm(ModelForm):
-    # id = fields.UUIDField()
-    # title = fields.CharField(verbose_name='Title')
-    # genre = fields.CharField(verbose_name='Genre')
     # premier = May 12, 2017
     # Expect 2017-05-12
     premier = ScrapperDateField(input_formats=['%Y-%m-%d'])
-    # avg_tomatometer = fields.CharField(verbose_name='Tomato_Score')
-    # avg_audience_score = fields.CharField(verbose_name='Audience Score')
-
     class Meta:
         model = Film
         fields = '__all__'

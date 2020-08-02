@@ -1,7 +1,18 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.shortcuts import render, HttpResponse
+from django.views.generic import TemplateView, View
+import json
 
 from .models import Film
+
+
+class FilterListView(View):
+    def get(self, request, *args, **kwargs):
+        queryset = Film.objects.values_list('title', flat=True)
+
+        if 'title' in request.GET:
+            queryset=queryset.filter(title__startswith=request.GET['title'])
+
+        return HttpResponse(json.dumps(list(queryset)), content_type='application/json')
 
 
 # Create your views here.
@@ -14,16 +25,7 @@ class ListAllView(TemplateView):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.context)
 
-    def post(self, request, *args, **kwargs):
-        pass
 
-    def put(self, request, *args, **kwargs):
-        pass
-
-    def delete(self, request, *args, **kwargs):
-        pass
-
-#
 class ListDetailView(TemplateView):
     template_name = "scrapper/detail.html"
     context = {

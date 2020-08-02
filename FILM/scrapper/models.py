@@ -5,7 +5,6 @@ from django.db import models
 
 
 class Film(models.Model):
-    id = models.UUIDField(primary_key=True, verbose_name='ID')
     title = models.CharField(max_length=50, null=False, verbose_name='Title')
     genre = models.CharField(max_length=40, verbose_name='Genre')
     premier = models.DateField(verbose_name='Premier date')

@@ -65,12 +65,20 @@ def get_url_content(url):
                                  premier=premier))
             if form.is_valid():
                 premier_cleaned = form.cleaned_data['premier']
-                film = Film.objects.filter(title=title, avg_tomatometer=tomatores_score,
-                                           avg_audience_score=audience_score, genre=genre_type,
-                                           premier=premier_cleaned)
-                if film.exists():
+                film_check = Film.objects.filter(title=title,
+                                                 avg_tomatometer=tomatores_score,
+                                                 avg_audience_score=audience_score,
+                                                 genre=genre_type,
+                                                 premier=premier_cleaned)
+                film = Film(title=title,
+                            avg_tomatometer=tomatores_score,
+                            avg_audience_score=audience_score,
+                            genre=genre_type,
+                            premier=premier_cleaned)
+                if film_check.exists():
                     pass
                 else:
+                    model_film.append(film)
 
             else:
                 logger.warning(form.errors)
