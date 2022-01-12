@@ -12,7 +12,7 @@ importlib-metadata==1.7.0
 lxml==4.5.2
 Markdown==3.2.2
 multidict==4.7.6
-pipenv==2018.11.26
+pipenv==2022.1.8
 pytz==2020.1
 requests==2.24.0
 soupsieve==2.0.1
